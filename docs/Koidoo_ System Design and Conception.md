@@ -144,23 +144,23 @@ The Component Diagram illustrates the high-level structure of the Koidoo system,
 classDiagram
     direction LR
 
-    class MobileApp <<component>>
-    class WebPortal <<component>>
-    class APIGateway <<component>>
-    class UserService <<component>>
-    class ParcelService <<component>>
-    class TripService <<component>>
-    class MatchingService <<component>>
-    class PaymentService <<component>>
-    class NotificationServiceInternal <<component>>
-    class ChatService <<component>>
-    class DocumentService <<component>>
-    class PostgreSQLDB <<database>>
+    class MobileApp
+    class WebPortal
+    class APIGateway
+    class UserService
+    class ParcelService
+    class TripService
+    class MatchingService
+    class PaymentService
+    class NotificationServiceInternal
+    class ChatService
+    class DocumentService
+    class PostgreSQLDB
 
-    class IDVerificationAPI <<external API>>
-    class PaymentGatewayAPI <<external API>>
-    class MappingAPI <<external API>>
-    class NotificationAPIExternal <<external API>>
+    class IDVerificationAPI
+    class PaymentGatewayAPI
+    class MappingAPI
+    class NotificationAPIExternal
 
     MobileApp --> APIGateway : REST/HTTP
     WebPortal --> APIGateway : REST/HTTP
@@ -191,7 +191,7 @@ classDiagram
     PaymentGatewayAPI ..> PaymentService : Callback/Webhook
     MappingAPI ..> MatchingService : Data
     NotificationAPIExternal ..> NotificationServiceInternal : Status
-    
+
 ```
 
 
@@ -565,130 +565,56 @@ This BDD illustrates the top-level system context of Koidoo and defines its prim
 *   **MappingService:** External service for location and mapping.
 *   **NotificationProviderService:** External service for sending notifications (e.g., FCM, Twilio).
 
-```d2
-direction: right
+```mermaid
+flowchart LR
+    %% Nodes
+    KoidooSystem["Koidoo System"]
+    UserApplication["User Application"]
+    MobileApp["Mobile App"]
+    WebPortal["Web Portal"]
+    BackendServices["Backend Services"]
+    UserService["User Service"]
+    ParcelService["Parcel Service"]
+    TripService["Trip Service"]
+    MatchingService["Matching Service"]
+    PaymentService["Payment Service"]
+    NotificationService["Notification Service"]
+    ChatService["Chat Service"]
+    DocumentService["Document Service"]
+    Database[(Database)]
+    ExternalService["External Service"]
+    IdentityVerificationService["Identity Verification Service"]
+    PaymentGatewayService["Payment Gateway Service"]
+    MappingService["Mapping Service"]
+    NotificationProviderService["Notification Provider Service"]
 
-KoidooSystem: {
-  shape: rectangle
-  label: "Koidoo System"
-}
+    %% Relationships
+    KoidooSystem -.->|composes| UserApplication
+    KoidooSystem -.->|composes| BackendServices
+    KoidooSystem -.->|uses| ExternalService
 
-UserApplication: {
-  shape: rectangle
-  label: "User Application"
-}
+    UserApplication -.->|generalizes| MobileApp
+    UserApplication -.->|generalizes| WebPortal
 
-MobileApp: {
-  shape: rectangle
-  label: "Mobile App"
-}
+    BackendServices -.->|composes| UserService
+    BackendServices -.->|composes| ParcelService
+    BackendServices -.->|composes| TripService
+    BackendServices -.->|composes| MatchingService
+    BackendServices -.->|composes| PaymentService
+    BackendServices -.->|composes| NotificationService
+    BackendServices -.->|composes| ChatService
+    BackendServices -.->|composes| DocumentService
+    BackendServices -.->|uses| Database
 
-WebPortal: {
-  shape: rectangle
-  label: "Web Portal"
-}
+    ExternalService -.->|generalizes| IdentityVerificationService
+    ExternalService -.->|generalizes| PaymentGatewayService
+    ExternalService -.->|generalizes| MappingService
+    ExternalService -.->|generalizes| NotificationProviderService
 
-BackendServices: {
-  shape: rectangle
-  label: "Backend Services"
-}
-
-UserService: {
-  shape: rectangle
-  label: "User Service"
-}
-
-ParcelService: {
-  shape: rectangle
-  label: "Parcel Service"
-}
-
-TripService: {
-  shape: rectangle
-  label: "Trip Service"
-}
-
-MatchingService: {
-  shape: rectangle
-  label: "Matching Service"
-}
-
-PaymentService: {
-  shape: rectangle
-  label: "Payment Service"
-}
-
-NotificationService: {
-  shape: rectangle
-  label: "Notification Service"
-}
-
-ChatService: {
-  shape: rectangle
-  label: "Chat Service"
-}
-
-DocumentService: {
-  shape: rectangle
-  label: "Document Service"
-}
-
-Database: {
-  shape: cylinder
-  label: "Database"
-}
-
-ExternalService: {
-  shape: rectangle
-  label: "External Service"
-}
-
-IdentityVerificationService: {
-  shape: rectangle
-  label: "Identity Verification Service"
-}
-
-PaymentGatewayService: {
-  shape: rectangle
-  label: "Payment Gateway Service"
-}
-
-MappingService: {
-  shape: rectangle
-  label: "Mapping Service"
-}
-
-NotificationProviderService: {
-  shape: rectangle
-  label: "Notification Provider Service"
-}
-
-KoidooSystem -> UserApplication: { label: "composes", style: { stroke-dash: 2 } }
-KoidooSystem -> BackendServices: { label: "composes", style: { stroke-dash: 2 } }
-KoidooSystem -> ExternalService: { label: "uses", style: { stroke-dash: 2 } }
-
-UserApplication -> MobileApp: { label: "generalizes", style: { stroke-dash: 2 } }
-UserApplication -> WebPortal: { label: "generalizes", style: { stroke-dash: 2 } }
-
-BackendServices -> UserService: { label: "composes", style: { stroke-dash: 2 } }
-BackendServices -> ParcelService: { label: "composes", style: { stroke-dash: 2 } }
-BackendServices -> TripService: { label: "composes", style: { stroke-dash: 2 } }
-BackendServices -> MatchingService: { label: "composes", style: { stroke-dash: 2 } }
-BackendServices -> PaymentService: { label: "composes", style: { stroke-dash: 2 } }
-BackendServices -> NotificationService: { label: "composes", style: { stroke-dash: 2 } }
-BackendServices -> ChatService: { label: "composes", style: { stroke-dash: 2 } }
-BackendServices -> DocumentService: { label: "composes", style: { stroke-dash: 2 } }
-BackendServices -> Database: { label: "uses", style: { stroke-dash: 2 } }
-
-ExternalService -> IdentityVerificationService: { label: "generalizes", style: { stroke-dash: 2 } }
-ExternalService -> PaymentGatewayService: { label: "generalizes", style: { stroke-dash: 2 } }
-ExternalService -> MappingService: { label: "generalizes", style: { stroke-dash: 2 } }
-ExternalService -> NotificationProviderService: { label: "generalizes", style: { stroke-dash: 2 } }
-
-UserService -> IdentityVerificationService: { label: "integrates with" }
-PaymentService -> PaymentGatewayService: { label: "integrates with" }
-MatchingService -> MappingService: { label: "integrates with" }
-NotificationService -> NotificationProviderService: { label: "integrates with" }
+    UserService -->|integrates with| IdentityVerificationService
+    PaymentService -->|integrates with| PaymentGatewayService
+    MatchingService -->|integrates with| MappingService
+    NotificationService -->|integrates with| NotificationProviderService
 
 ```
 
@@ -714,101 +640,41 @@ This IBD shows the internal structure of the `BackendServices` block, detailing 
 **Connectors:**
 *   Represent communication pathways (e.g., RESTful API calls, message queues).
 
-```d2
-direction: right
+```mermaid
+%% SysML IBD – Backend Services
+flowchart LR
+    subgraph Backend_Services["Backend Services"]
+        direction TB
+        userSvc["User Service"]
+        parcelSvc["Parcel Service"]
+        tripSvc["Trip Service"]
+        matchingSvc["Matching Service"]
+        paymentSvc["Payment Service"]
+        notificationSvc["Notification Service"]
+        chatSvc["Chat Service"]
+        documentSvc["Document Service"]
+    end
 
-BackendServices: {
-  shape: rectangle
-  label: "Backend Services"
-  userSvc: {
-    shape: rectangle
-    label: "User Service"
-    ports: {
-      api: { side: right, shape: circle, label: "API" }
-      db: { side: bottom, shape: circle, label: "DB" }
-    }
-  }
-  parcelSvc: {
-    shape: rectangle
-    label: "Parcel Service"
-    ports: {
-      api: { side: right, shape: circle, label: "API" }
-      db: { side: bottom, shape: circle, label: "DB" }
-    }
-  }
-  tripSvc: {
-    shape: rectangle
-    label: "Trip Service"
-    ports: {
-      api: { side: right, shape: circle, label: "API" }
-      db: { side: bottom, shape: circle, label: "DB" }
-    }
-  }
-  matchingSvc: {
-    shape: rectangle
-    label: "Matching Service"
-    ports: {
-      api: { side: right, shape: circle, label: "API" }
-      db: { side: bottom, shape: circle, label: "DB" }
-      parcelApi: { side: left, shape: circle, label: "Parcel API" }
-      tripApi: { side: left, shape: circle, label: "Trip API" }
-      notifApi: { side: right, shape: circle, label: "Notif API" }
-    }
-  }
-  paymentSvc: {
-    shape: rectangle
-    label: "Payment Service"
-    ports: {
-      api: { side: right, shape: circle, label: "API" }
-      db: { side: bottom, shape: circle, label: "DB" }
-    }
-  }
-  notificationSvc: {
-    shape: rectangle
-    label: "Notification Service"
-    ports: {
-      api: { side: right, shape: circle, label: "API" }
-      db: { side: bottom, shape: circle, label: "DB" }
-    }
-  }
-  chatSvc: {
-    shape: rectangle
-    label: "Chat Service"
-    ports: {
-      api: { side: right, shape: circle, label: "API" }
-      db: { side: bottom, shape: circle, label: "DB" }
-    }
-  }
-  documentSvc: {
-    shape: rectangle
-    label: "Document Service"
-    ports: {
-      api: { side: right, shape: circle, label: "API" }
-      db: { side: bottom, shape: circle, label: "DB" }
-    }
-  }
-  db: {
-    shape: cylinder
-    label: "PostgreSQL DB"
-  }
+    db[(PostgreSQL DB)]
 
-  userSvc.db -> db
-  parcelSvc.db -> db
-  tripSvc.db -> db
-  matchingSvc.db -> db
-  paymentSvc.db -> db
-  notificationSvc.db -> db
-  chatSvc.db -> db
-  documentSvc.db -> db
+    %% DB connections
+    userSvc -->|DB| db
+    parcelSvc -->|DB| db
+    tripSvc -->|DB| db
+    matchingSvc -->|DB| db
+    paymentSvc -->|DB| db
+    notificationSvc -->|DB| db
+    chatSvc -->|DB| db
+    documentSvc -->|DB| db
 
-  matchingSvc.parcelApi -> parcelSvc.api
-  matchingSvc.tripApi -> tripSvc.api
-  matchingSvc.notifApi -> notificationSvc.api
+    %% Internal APIs
+    matchingSvc -->|Parcel API| parcelSvc
+    matchingSvc -->|Trip API| tripSvc
+    matchingSvc -->|Notif API| notificationSvc
 
-  chatSvc.api -> userSvc.api: { label: "User Info" }
-  paymentSvc.api -> userSvc.api: { label: "User Info" }
+    chatSvc -->|User Info| userSvc
+    paymentSvc -->|User Info| userSvc
 
-}
 ```
 
 
@@ -822,99 +688,61 @@ This section describes the dynamic behavior of the Koidoo system from a SysML pe
 
 This SysML Activity Diagram models the end-to-end lifecycle of a parcel delivery within the Koidoo system, highlighting the activities performed by different system blocks and external services. It provides a comprehensive view of the process from parcel creation to final delivery and payment release.
 
-```d2
-direction: right
+```mermaid
+%% Parcel Delivery Lifecycle – Koidoo System
+flowchart LR
+    %% Koidoo internal components
+    subgraph Koidoo_System["Koidoo System"]
+        SenderApp["Sender Application"]
+        TravelerApp["Traveler Application"]
+        BackendAPI["Backend API"]
+        ParcelService["Parcel Service"]
+        TripService["Trip Service"]
+        MatchingService["Matching Service"]
+        PaymentService["Payment Service"]
+        NotificationService["Notification Service"]
+    end
+    ExternalPaymentGateway["External Payment Gateway"]
 
-KoidooSystem: {
-  shape: rectangle
-  label: "Koidoo System"
-  SenderApp: {
-    shape: rectangle
-    label: "Sender Application"
-  }
-  TravelerApp: {
-    shape: rectangle
-    label: "Traveler Application"
-  }
-  BackendAPI: {
-    shape: rectangle
-    label: "Backend API"
-  }
-  ParcelService: {
-    shape: rectangle
-    label: "Parcel Service"
-  }
-  TripService: {
-    shape: rectangle
-    label: "Trip Service"
-  }
-  MatchingService: {
-    shape: rectangle
-    label: "Matching Service"
-  }
-  PaymentService: {
-    shape: rectangle
-    label: "Payment Service"
-  }
-  NotificationService: {
-    shape: rectangle
-    label: "Notification Service"
-  }
-  ExternalPaymentGateway: {
-    shape: rectangle
-    label: "External Payment Gateway"
-  }
-}
+    %% Activity flow
+    StartNode((Start)) --> CreateParcelRequest["Create Parcel Request"]
+    CreateParcelRequest --> SubmitParcelRequest["Submit Parcel Request"]
+    SubmitParcelRequest --> FindMatchingTraveler["Find Matching Traveler"]
+    FindMatchingTraveler --> OfferParcelToTraveler["Offer Parcel to Traveler"]
+    OfferParcelToTraveler --> AcceptParcelOffer["Accept Parcel Offer"]
+    AcceptParcelOffer --> ArrangePickup["Arrange Pickup"]
+    ArrangePickup --> ParcelPickedUp["Parcel Picked Up"]
+    ParcelPickedUp --> InTransit["In Transit"]
+    InTransit --> ParcelDelivered["Parcel Delivered"]
+    ParcelDelivered --> ConfirmDelivery["Confirm Delivery"]
+    ConfirmDelivery --> ReleasePayment["Release Payment"]
+    ReleasePayment --> EndNode((End))
 
-start -> CreateParcelRequest
-CreateParcelRequest -> SubmitParcelRequest
-SubmitParcelRequest -> FindMatchingTraveler
-FindMatchingTraveler -> OfferParcelToTraveler
-OfferParcelToTraveler -> AcceptParcelOffer
-AcceptParcelOffer -> ArrangePickup
-ArrangePickup -> ParcelPickedUp
-ParcelPickedUp -> InTransit
-InTransit -> ParcelDelivered
-ParcelDelivered -> ConfirmDelivery
-ConfirmDelivery -> ReleasePayment
-ReleasePayment -> end
-
-CreateParcelRequest: { label: "Create Parcel Request" }
-SubmitParcelRequest: { label: "Submit Parcel Request" }
-FindMatchingTraveler: { label: "Find Matching Traveler" }
-OfferParcelToTraveler: { label: "Offer Parcel to Traveler" }
-AcceptParcelOffer: { label: "Accept Parcel Offer" }
-ArrangePickup: { label: "Arrange Pickup" }
-ParcelPickedUp: { label: "Parcel Picked Up" }
-InTransit: { label: "In Transit" }
-ParcelDelivered: { label: "Parcel Delivered" }
-ConfirmDelivery: { label: "Confirm Delivery" }
-ReleasePayment: { label: "Release Payment" }
-
-KoidooSystem.SenderApp -> CreateParcelRequest
-CreateParcelRequest -> KoidooSystem.BackendAPI
-KoidooSystem.BackendAPI -> SubmitParcelRequest
-SubmitParcelRequest -> KoidooSystem.ParcelService
-KoidooSystem.ParcelService -> FindMatchingTraveler
-FindMatchingTraveler -> KoidooSystem.MatchingService
-KoidooSystem.MatchingService -> OfferParcelToTraveler
-OfferParcelToTraveler -> KoidooSystem.TravelerApp
-KoidooSystem.TravelerApp -> AcceptParcelOffer
-AcceptParcelOffer -> KoidooSystem.BackendAPI
-KoidooSystem.BackendAPI -> ArrangePickup
-ArrangePickup -> KoidooSystem.TravelerApp
-KoidooSystem.TravelerApp -> ParcelPickedUp
-ParcelPickedUp -> KoidooSystem.BackendAPI
-KoidooSystem.BackendAPI -> InTransit
-InTransit -> KoidooSystem.BackendAPI
-KoidooSystem.BackendAPI -> ParcelDelivered
-ParcelDelivered -> KoidooSystem.SenderApp
-KoidooSystem.SenderApp -> ConfirmDelivery
-ConfirmDelivery -> KoidooSystem.BackendAPI
-KoidooSystem.BackendAPI -> ReleasePayment
-ReleasePayment -> KoidooSystem.PaymentService
-KoidooSystem.PaymentService -> ExternalPaymentGateway
-ExternalPaymentGateway -> ReleasePayment
+    %% Component interactions along the flow
+    SenderApp -->|Initiates| CreateParcelRequest
+    CreateParcelRequest --> BackendAPI
+    BackendAPI --> SubmitParcelRequest
+    SubmitParcelRequest --> ParcelService
+    ParcelService --> FindMatchingTraveler
+    FindMatchingTraveler --> MatchingService
+    MatchingService --> OfferParcelToTraveler
+    OfferParcelToTraveler --> TravelerApp
+    TravelerApp --> AcceptParcelOffer
+    AcceptParcelOffer --> BackendAPI
+    BackendAPI --> ArrangePickup
+    ArrangePickup --> TravelerApp
+    TravelerApp --> ParcelPickedUp
+    ParcelPickedUp --> BackendAPI
+    BackendAPI --> InTransit
+    InTransit --> BackendAPI
+    BackendAPI --> ParcelDelivered
+    ParcelDelivered --> SenderApp
+    SenderApp --> ConfirmDelivery
+    ConfirmDelivery --> BackendAPI
+    BackendAPI --> ReleasePayment
+    ReleasePayment --> PaymentService
+    PaymentService -->|Escrow/Release| ExternalPaymentGateway
+    ExternalPaymentGateway -->|Funds Released| ReleasePayment
 
 ```
 
@@ -922,58 +750,38 @@ ExternalPaymentGateway -> ReleasePayment
 
 This SysML Sequence Diagram illustrates the detailed message exchange during the payment processing, focusing on the escrow mechanism and the interactions between the Payment Service, External Payment Gateway, and other relevant system blocks.
 
-```d2
-direction: right
-
-KoidooSystem: {
-  shape: rectangle
-  label: "Koidoo System"
-  SenderApp: {
-    shape: rectangle
-    label: "Sender Application"
-  }
-  PaymentService: {
-    shape: rectangle
-    label: "Payment Service"
-  }
-  ExternalPaymentGateway: {
-    shape: rectangle
-    label: "External Payment Gateway"
-  }
-  TravelerApp: {
-    shape: rectangle
-    label: "Traveler Application"
-  }
-  ParcelService: {
-    shape: rectangle
-    label: "Parcel Service"
-  }
-}
-
+```mermaid
+%% Payment Processing with Escrow – Sequence Diagram
 sequenceDiagram
-  SenderApp -> PaymentService: InitiatePayment(parcelId, amount)
-  PaymentService -> ExternalPaymentGateway: RequestEscrow(senderAccount, amount)
-  ExternalPaymentGateway --> PaymentService: EscrowInitiated(transactionId)
-  PaymentService -> SenderApp: PaymentConfirmation(transactionId, status: "Held in Escrow")
+    participant SenderApp
+    participant PaymentService
+    participant ExternalPaymentGateway
+    participant TravelerApp
+    participant ParcelService
 
-  note over SenderApp, TravelerApp: Parcel Delivery Process
+    SenderApp->>PaymentService: InitiatePayment(parcelId, amount)
+    PaymentService->>ExternalPaymentGateway: RequestEscrow(senderAccount, amount)
+    ExternalPaymentGateway-->>PaymentService: EscrowInitiated(transactionId)
+    PaymentService->>SenderApp: PaymentConfirmation(transactionId, "Held in Escrow")
 
-  TravelerApp -> ParcelService: ConfirmDelivery(parcelId)
-  ParcelService --> PaymentService: DeliveryConfirmed(parcelId)
-  PaymentService -> ExternalPaymentGateway: ReleaseEscrow(transactionId, travelerAccount)
-  ExternalPaymentGateway --> PaymentService: EscrowReleased(transactionId)
-  PaymentService -> TravelerApp: PayoutConfirmation(amount)
-  PaymentService -> SenderApp: DeliveryCompleteNotification()
+    Note over SenderApp,TravelerApp: Parcel Delivery Process
 
-  alt Dispute Occurs
-    SenderApp -> PaymentService: RaiseDispute(parcelId, reason)
-    PaymentService -> ExternalPaymentGateway: HoldEscrow(transactionId)
-    ExternalPaymentGateway --> PaymentService: EscrowHeld(transactionId)
-    PaymentService -> SenderApp: DisputeRegistered()
-    note over PaymentService: Initiate Dispute Resolution Process
-    PaymentService -> ExternalPaymentGateway: (After Resolution) ReleaseEscrow(transactionId, resolvedAccount)
-    ExternalPaymentGateway --> PaymentService: EscrowReleased(transactionId)
-  end
+    TravelerApp->>ParcelService: ConfirmDelivery(parcelId)
+    ParcelService-->>PaymentService: DeliveryConfirmed(parcelId)
+    PaymentService->>ExternalPaymentGateway: ReleaseEscrow(transactionId, travelerAccount)
+    ExternalPaymentGateway-->>PaymentService: EscrowReleased(transactionId)
+    PaymentService->>TravelerApp: PayoutConfirmation(amount)
+    PaymentService->>SenderApp: DeliveryCompleteNotification()
+
+    alt Dispute Occurs
+        SenderApp->>PaymentService: RaiseDispute(parcelId, reason)
+        PaymentService->>ExternalPaymentGateway: HoldEscrow(transactionId)
+        ExternalPaymentGateway-->>PaymentService: EscrowHeld(transactionId)
+        PaymentService->>SenderApp: DisputeRegistered()
+        Note over PaymentService: Initiate Dispute Resolution Process
+        PaymentService->>ExternalPaymentGateway: ReleaseEscrow(transactionId, resolvedAccount)
+        ExternalPaymentGateway-->>PaymentService: EscrowReleased(transactionId)
+    end
 
 ```
 
@@ -1005,105 +813,49 @@ This section focuses on ensuring that all identified requirements are addressed 
 *   **API Gateway:** Ensures secure and scalable access to backend services.
 *   **PostgreSQL DB:** Provides persistent and scalable data storage.
 
-```d2
-direction: right
+```mermaid
+%% Requirements Traceability Diagram
+flowchart LR
+    %% Requirements
+    subgraph Requirements["Requirements"]
+        REQ_FUNC_001["REQ-FUNC-001: User Registration"]
+        REQ_FUNC_002["REQ-FUNC-002: Identity Verification"]
+        REQ_FUNC_003["REQ-FUNC-003: Parcel Request Creation"]
+        REQ_FUNC_004["REQ-FUNC-004: Trip Publication"]
+        REQ_FUNC_005["REQ-FUNC-005: Parcel-Trip Matching"]
+        REQ_FUNC_006["REQ-FUNC-006: Secure Payment Processing"]
+        REQ_NONFUNC_001["REQ-NONFUNC-001: Scalability"]
+        REQ_NONFUNC_002["REQ-NONFUNC-002: Security"]
+        REQ_NONFUNC_003["REQ-NONFUNC-003: Performance"]
+    end
 
-KoidooSystem: {
-  shape: rectangle
-  label: "Koidoo System"
-}
+    %% Design elements
+    subgraph Design_Elements["Design Elements"]
+        UserServiceDE["User Service"]
+        IdentityVerificationServiceDE["Identity Verification Service"]
+        ParcelServiceDE["Parcel Service"]
+        TripServiceDE["Trip Service"]
+        MatchingServiceDE["Matching Service"]
+        PaymentServiceDE["Payment Service"]
+        APIGatewayDE["API Gateway"]
+        PostgreSQLDBDE[(PostgreSQL DB)]
+    end
 
-requirements: {
-  shape: rectangle
-  label: "Requirements"
-  REQ_FUNC_001: {
-    shape: rectangle
-    label: "REQ-FUNC-001: User Registration"
-  }
-  REQ_FUNC_002: {
-    shape: rectangle
-    label: "REQ-FUNC-002: Identity Verification"
-  }
-  REQ_FUNC_003: {
-    shape: rectangle
-    label: "REQ-FUNC-003: Parcel Request Creation"
-  }
-  REQ_FUNC_004: {
-    shape: rectangle
-    label: "REQ-FUNC-004: Trip Publication"
-  }
-  REQ_FUNC_005: {
-    shape: rectangle
-    label: "REQ-FUNC-005: Parcel-Trip Matching"
-  }
-  REQ_FUNC_006: {
-    shape: rectangle
-    label: "REQ-FUNC-006: Secure Payment Processing"
-  }
-  REQ_NONFUNC_001: {
-    shape: rectangle
-    label: "REQ-NONFUNC-001: Scalability"
-  }
-  REQ_NONFUNC_002: {
-    shape: rectangle
-    label: "REQ-NONFUNC-002: Security"
-  }
-  REQ_NONFUNC_003: {
-    shape: rectangle
-    label: "REQ-NONFUNC-003: Performance"
-  }
-}
+    %% Satisfy links
+    REQ_FUNC_001 -->|satisfies| UserServiceDE
+    REQ_FUNC_002 -->|satisfies| IdentityVerificationServiceDE
+    REQ_FUNC_003 -->|satisfies| ParcelServiceDE
+    REQ_FUNC_004 -->|satisfies| TripServiceDE
+    REQ_FUNC_005 -->|satisfies| MatchingServiceDE
+    REQ_FUNC_006 -->|satisfies| PaymentServiceDE
 
-design_elements: {
-  shape: rectangle
-  label: "Design Elements"
-  UserService: {
-    shape: rectangle
-    label: "User Service"
-  }
-  IdentityVerificationService: {
-    shape: rectangle
-    label: "Identity Verification Service"
-  }
-  ParcelService: {
-    shape: rectangle
-    label: "Parcel Service"
-  }
-  TripService: {
-    shape: rectangle
-    label: "Trip Service"
-  }
-  MatchingService: {
-    shape: rectangle
-    label: "Matching Service"
-  }
-  PaymentService: {
-    shape: rectangle
-    label: "Payment Service"
-  }
-  APIGateway: {
-    shape: rectangle
-    label: "API Gateway"
-  }
-  PostgreSQLDB: {
-    shape: cylinder
-    label: "PostgreSQL DB"
-  }
-}
-
-REQ_FUNC_001 -> UserService: { label: "satisfies" }
-REQ_FUNC_002 -> IdentityVerificationService: { label: "satisfies" }
-REQ_FUNC_003 -> ParcelService: { label: "satisfies" }
-REQ_FUNC_004 -> TripService: { label: "satisfies" }
-REQ_FUNC_005 -> MatchingService: { label: "satisfies" }
-REQ_FUNC_006 -> PaymentService: { label: "satisfies" }
-
-REQ_NONFUNC_001 -> APIGateway: { label: "refines" }
-REQ_NONFUNC_001 -> PostgreSQLDB: { label: "refines" }
-REQ_NONFUNC_002 -> APIGateway: { label: "refines" }
-REQ_NONFUNC_002 -> UserService: { label: "refines" }
-REQ_NONFUNC_003 -> APIGateway: { label: "refines" }
-REQ_NONFUNC_003 -> MatchingService: { label: "refines" }
+    %% Refine links
+    REQ_NONFUNC_001 -.->|refines| APIGatewayDE
+    REQ_NONFUNC_001 -.->|refines| PostgreSQLDBDE
+    REQ_NONFUNC_002 -.->|refines| APIGatewayDE
+    REQ_NONFUNC_002 -.->|refines| UserServiceDE
+    REQ_NONFUNC_003 -.->|refines| APIGatewayDE
+    REQ_NONFUNC_003 -.->|refines| MatchingServiceDE
 
 ```
 
