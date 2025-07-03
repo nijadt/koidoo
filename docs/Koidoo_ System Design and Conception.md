@@ -39,80 +39,82 @@ The Use Case Diagram illustrates the interactions between the primary actors and
 *   **Rate and Review:** Sender and Traveler provide feedback on each other after a transaction.
 *   **Manage System (Admin):** Admin/Moderator performs administrative tasks like user management, content moderation, and system configuration.
 
-```mmd
---- 
-title: Koidoo Use Case Diagram
---- 
+```mermaid
 
-classDiagram
-    direction LR
+%% Koidoo Use Case Diagram
+flowchart LR
+    subgraph KoidooSystem [Koidoo System]
+        Manage_User_Profile(["Manage User Profile"])
+        Verify_Identity(["Verify Identity"])
+        Create_Parcel_Request(["Create Parcel Request"])
+        Manage_Trip(["Manage Trip"])
+        Browse_Parcel_Offers(["Browse Parcel Offers"])
+        Accept_Parcel_Offer(["Accept Parcel Offer"])
+        Negotiate_Terms(["Negotiate Terms"])
+        Manage_Parcel_Status(["Manage Parcel Status"])
+        Track_Parcel(["Track Parcel"])
+        Process_Payment(["Process Payment"])
+        Manage_Disputes(["Manage Disputes"])
+        Send_Notification(["Send Notification"])
+        Provide_Location_Data(["Provide Location Data"])
+        Rate_and_Review(["Rate and Review"])
+        Manage_System_Admin(["Manage System (Admin)"])
+    end
 
-    actor Sender
-    actor Traveler
-    actor Recipient
-    actor Admin/Moderator
-    actor "Payment Gateway" as PaymentGateway
-    actor "Identity Verification Service" as IDService
-    actor "Notification Service" as NotificationService
-    actor "Mapping Service" as MappingService
+    Sender[[Sender]]
+    Traveler[[Traveler]]
+    Recipient[[Recipient]]
+    AdminModerator[[Admin/Moderator]]
 
-    rectangle KoidooSystem {
-        usecase "Manage User Profile"
-        usecase "Verify Identity"
-        usecase "Create Parcel Request"
-        usecase "Manage Trip"
-        usecase "Browse Parcel Offers"
-        usecase "Accept Parcel Offer"
-        usecase "Negotiate Terms"
-        usecase "Manage Parcel Status"
-        usecase "Track Parcel"
-        usecase "Process Payment"
-        usecase "Manage Disputes"
-        usecase "Send Notification"
-        usecase "Provide Location Data"
-        usecase "Rate and Review"
-        usecase "Manage System (Admin)"
-    }
+    PaymentGateway[/"Payment Gateway"/]
+    IDService[/"Identity Verification Service"/]
+    NotificationServiceActor[/"Notification Service"/]
+    MappingServiceActor[/"Mapping Service"/]
 
-    Sender --|> "Manage User Profile"
-    Sender --|> "Verify Identity"
-    Sender --|> "Create Parcel Request"
-    Sender --|> "Negotiate Terms"
-    Sender --|> "Manage Parcel Status"
-    Sender --|> "Track Parcel"
-    Sender --|> "Process Payment"
-    Sender --|> "Rate and Review"
+    %% Actor ↔︎ Use-case associations
+    Sender --> Manage_User_Profile
+    Sender --> Verify_Identity
+    Sender --> Create_Parcel_Request
+    Sender --> Negotiate_Terms
+    Sender --> Manage_Parcel_Status
+    Sender --> Track_Parcel
+    Sender --> Process_Payment
+    Sender --> Rate_and_Review
 
-    Traveler --|> "Manage User Profile"
-    Traveler --|> "Verify Identity"
-    Traveler --|> "Manage Trip"
-    Traveler --|> "Browse Parcel Offers"
-    Traveler --|> "Accept Parcel Offer"
-    Traveler --|> "Negotiate Terms"
-    Traveler --|> "Manage Parcel Status"
-    Traveler --|> "Process Payment"
-    Traveler --|> "Rate and Review"
+    Traveler --> Manage_User_Profile
+    Traveler --> Verify_Identity
+    Traveler --> Manage_Trip
+    Traveler --> Browse_Parcel_Offers
+    Traveler --> Accept_Parcel_Offer
+    Traveler --> Negotiate_Terms
+    Traveler --> Manage_Parcel_Status
+    Traveler --> Process_Payment
+    Traveler --> Rate_and_Review
 
-    Recipient --|> "Track Parcel"
-    Recipient --|> "Manage User Profile"
+    Recipient --> Track_Parcel
+    Recipient --> Manage_User_Profile
 
-    Admin/Moderator --|> "Manage User Profile"
-    Admin/Moderator --|> "Manage Disputes"
-    Admin/Moderator --|> "Manage System (Admin)"
+    AdminModerator --> Manage_User_Profile
+    AdminModerator --> Manage_Disputes
+    AdminModerator --> Manage_System_Admin
 
-    "Process Payment" <.. PaymentGateway : uses
-    "Verify Identity" <.. IDService : uses
-    "Send Notification" <.. NotificationService : uses
-    "Provide Location Data" <.. MappingService : uses
+    %% «uses» relationships with external systems
+    PaymentGateway -.->|uses| Process_Payment
+    IDService -.->|uses| Verify_Identity
+    NotificationServiceActor -.->|uses| Send_Notification
+    MappingServiceActor -.->|uses| Provide_Location_Data
 
-    "Accept Parcel Offer" <.. "Browse Parcel Offers" : <<extends>>
-    "Negotiate Terms" <.. "Accept Parcel Offer" : <<extends>>
-    "Manage Parcel Status" <.. "Create Parcel Request" : <<includes>>
-    "Manage Parcel Status" <.. "Accept Parcel Offer" : <<includes>>
-    "Track Parcel" <.. "Manage Parcel Status" : <<includes>>
-    "Process Payment" <.. "Manage Parcel Status" : <<includes>>
-    "Rate and Review" <.. "Process Payment" : <<includes>>
+    %% «extends» and «include» relationships between use-cases
+    Browse_Parcel_Offers -.->|«extends»| Accept_Parcel_Offer
+    Accept_Parcel_Offer  -.->|«extends»| Negotiate_Terms
 
+    Create_Parcel_Request -.->|«include»| Manage_Parcel_Status
+    Accept_Parcel_Offer   -.->|«include»| Manage_Parcel_Status
+
+    Manage_Parcel_Status  -.->|«include»| Track_Parcel
+    Manage_Parcel_Status  -.->|«include»| Process_Payment
+
+    Process_Payment       -.->|«include»| Rate_and_Review
 ```
 
 ### 2.2. UML Component Diagram
@@ -137,31 +139,28 @@ The Component Diagram illustrates the high-level structure of the Koidoo system,
 *   **Mapping API:** External service for location and routing.
 *   **Notification API:** External service for sending push, SMS, and email notifications.
 
-```mmd
---- 
-title: Koidoo Component Diagram
---- 
-
+```mermaid
+%% Koidoo Component Diagram
 classDiagram
     direction LR
 
-    component "Mobile App" as MobileApp
-    component "Web Portal" as WebPortal
-    component "API Gateway" as APIGateway
-    component "User Service" as UserService
-    component "Parcel Service" as ParcelService
-    component "Trip Service" as TripService
-    component "Matching Service" as MatchingService
-    component "Payment Service" as PaymentService
-    component "Notification Service" as NotificationServiceInternal
-    component "Chat Service" as ChatService
-    component "Document Service" as DocumentService
-    component "PostgreSQL DB" as PostgreSQLDB
+    class MobileApp <<component>>
+    class WebPortal <<component>>
+    class APIGateway <<component>>
+    class UserService <<component>>
+    class ParcelService <<component>>
+    class TripService <<component>>
+    class MatchingService <<component>>
+    class PaymentService <<component>>
+    class NotificationServiceInternal <<component>>
+    class ChatService <<component>>
+    class DocumentService <<component>>
+    class PostgreSQLDB <<database>>
 
-    component "Identity Verification API" as IDVerificationAPI
-    component "Payment Gateway API" as PaymentGatewayAPI
-    component "Mapping API" as MappingAPI
-    component "Notification API" as NotificationAPIExternal
+    class IDVerificationAPI <<external API>>
+    class PaymentGatewayAPI <<external API>>
+    class MappingAPI <<external API>>
+    class NotificationAPIExternal <<external API>>
 
     MobileApp --> APIGateway : REST/HTTP
     WebPortal --> APIGateway : REST/HTTP
@@ -192,7 +191,7 @@ classDiagram
     PaymentGatewayAPI ..> PaymentService : Callback/Webhook
     MappingAPI ..> MatchingService : Data
     NotificationAPIExternal ..> NotificationServiceInternal : Status
-
+    
 ```
 
 
@@ -206,11 +205,7 @@ This section details the dynamic behavior of the Koidoo system, illustrating how
 
 This activity diagram illustrates the process a Sender follows to create a parcel request on the Koidoo platform.
 
-```mmd
---- 
-title: Koidoo Activity Diagram: Create Parcel Request
---- 
-
+```mermaid
 sequenceDiagram
     participant Sender
     participant MobileApp
@@ -248,11 +243,7 @@ sequenceDiagram
 
 This sequence diagram illustrates the interaction between the Sender, Traveler, and various system components during the parcel matching and acceptance process.
 
-```mmd
---- 
-title: Koidoo Sequence Diagram: Parcel Matching and Acceptance
---- 
-
+```mermaid
 sequenceDiagram
     participant SenderApp as Sender
     participant TravelerApp as Traveler
@@ -405,11 +396,7 @@ This section defines the static structure of the Koidoo system, illustrating the
     *   `resolvedDate: DateTime`
     *   `resolutionDetails: String`
 
-```mmd
---- 
-title: Koidoo Class Diagram
---- 
-
+```mermaid
 classDiagram
     direction LR
 
